@@ -17,8 +17,6 @@ function renderSeries(data) {
     //la etiqueta pintada en HTML con el objeto del DATA
     $newLi.dataset.id = object.show.id;
 
-    console.log($newLi.dataset.id);
-
     //si no hay portada se pondrá una imagen por defecto
     if (!object.show.image) {
       $newLi.style = `background: url(https://via.placeholder.com/210x295/ffffff/666666/?text=TV) center`;
@@ -35,9 +33,14 @@ function renderSeries(data) {
     const $text = document.createTextNode(object.show.name);
     $newH3Title.appendChild($text);
 
-    //   $newLi.classList.add = "favorite";
+    const isPresent = favoriteShows.find((fav) => fav === object.show.id);
 
-    //   $favoritesUl.appendChild($newLi);
+    if (isPresent === undefined) {
+      $newLi.classList.add = "";
+    } else {
+      $newLi.classList.add = "favorite";
+      $favoritesUl.appendChild($newLi);
+    }
   }
 
   console.log($favoritesUl);
@@ -82,14 +85,14 @@ function handleClickCard(e) {
 
   //si isPresent no está en el array de favoritos, mételo
   if (isPresent === undefined) {
-    // favoriteShows.push(selectedId);
+    favoriteShows.push(selectedId);
   } else {
     //filtro y sobreescribo mi array inicial con los favoritos
     //con esto, si dejo de seleccionar la card, se elimina del array
     favoriteShows = favoriteShows.filter((fav) => fav !== selectedId);
   }
 
-  renderSeries(favoriteShows);
+  renderSeries(globalData);
 
   //hacemos un toggle para añadir y quitar la clase
   clickedCard.classList.toggle("favorite");
