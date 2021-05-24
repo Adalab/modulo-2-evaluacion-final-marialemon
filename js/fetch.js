@@ -1,18 +1,5 @@
 "use strict";
 
-//paso 1: getItem
-//si el localStorage está vacío llama al fetch
-//"shows" es una KEY que me he inventado, puede tener cualquier otro nombre
-if (localStorage.getItem("shows") === null) {
-  getShows();
-} else {
-  //LocalStorage
-  //paso 2: guardar los datos del localStorage en una variable
-  globalData = JSON.parse(localStorage.getItem("shows"));
-  //mostrar las series
-  renderSeries(globalData);
-}
-
 //FETCH
 
 function getShows() {
