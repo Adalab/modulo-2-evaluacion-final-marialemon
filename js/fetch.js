@@ -7,8 +7,11 @@ function getShows() {
     //then recoge la respuesta positiva (como un if)
     .then((response) => response.json()) //ejecuto el método json porque lo que espero recibir es un json
     .then((data) => {
-      globalData = data;
-
+      globalData.splice(0, globalData.length);
+      for (let item of data) {
+        globalData.push(item);
+      }
+      console.log(globalData);
       // paso 3: setItem
       // hacemos un JSON.stringify para convertir el objeto data
       // que inicialmente es un JSON, a un string

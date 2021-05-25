@@ -9,6 +9,7 @@ function renderSeries(data) {
     //Crear la lista desde el DOM
     const $newLi = document.createElement("li");
     $newLi.classList = "card";
+    $newLi.classList.add("card-serie");
 
     //le añadimos su id porque necesitaremos algo que conecte
     //la etiqueta pintada en HTML con el objeto del DATA
@@ -27,35 +28,40 @@ function renderSeries(data) {
     $newLi.appendChild($newH3Title);
     const $text = document.createTextNode(object.show.name);
     $newH3Title.appendChild($text);
-
-    function renderFavs() {
-      //si la card que se pinta está en mi array de favoritos
-      const isPresent = favoriteShows.find((fav) => fav === object.show.id);
-
-      if (isPresent === undefined) {
-        $newLi.classList.add = "";
-      } else {
-        $newLi.classList.add("favorite-card");
-        $favoritesUl.appendChild($newLi);
-      }
-
-      //Guardar favoritos en localStorage
-      localStorage.setItem("favorite shows", JSON.stringify(favoriteShows));
-
-      if (localStorage.getItem("favorite shows") === null) {
-        favoriteShows = JSON.parse(localStorage.getItem("favorite shows"));
-      }
-    }
-    renderFavs();
   }
-
   //Seleccionar cards
-
   const $allCards = document.querySelectorAll(".card");
-
   for (const card of $allCards) {
     //se le asigna un listener a CADA card, por eso se mete dentro del for of
     card.addEventListener("click", handleClickCard);
+  }
+}
+
+function renderFavs() {
+  console.log(favoriteShows);
+  favoriteShows = JSON.parse(localStorage.getItem("favorite shows"));
+  cleanFavs();
+  for (let object of favoriteShows) {
+    const $newLi = document.createElement("li");
+    $newLi.classList = "card";
+    $newLi.classList.add("favorite-card");
+
+    //le añadimos su id porque necesitaremos algo que conecte
+    //la etiqueta pintada en HTML con el objeto del DATA
+    $newLi.dataset.id = object.show.id;
+
+    //Si no hay portada se pondrá una default img
+    if (!object.show.image) {
+      $newLi.style = `background: url(https://via.placeholder.com/210x295/ffffff/666666/?text=TV) center`;
+    } else {
+      $newLi.style = `background: url(${object.show.image.medium}) center; background-size: cover`;
+    }
+    const $newH3Title = document.createElement("h3");
+    $newH3Title.classList = "card-title";
+    $newLi.appendChild($newH3Title);
+    const $text = document.createTextNode(object.show.name);
+    $newH3Title.appendChild($text);
+    $favoritesUl.appendChild($newLi);
   }
 }
 
@@ -75,23 +81,25 @@ function handleClickCard(e) {
   //En el array de favoriteShows buscamos la coincidencia del data-id de la card seleccionada
   //con el id de la serie del objeto data
   //si la card clickada está en favoritos
-  const isPresent = favoriteShows.find((fav) => fav === selectedId);
+  const isPresent = favoriteShows.find((fav) => fav.show.id === selectedId);
 
   //si isPresent no está en el array de favoritos, mételo
   if (isPresent === undefined) {
-    favoriteShows.push(selectedId);
+    const fav = globalData.find((fav) => fav.show.id === selectedId);
+    favoriteShows.push(fav);
   } else {
     //filtro y sobreescribo mi array inicial con los favoritos
     //con esto, si dejo de seleccionar la card, se elimina del array
     favoriteShows = favoriteShows.filter((fav) => fav !== selectedId);
   }
 
-  console.log(isPresent, favoriteShows);
-
   //hacemos un toggle para añadir y quitar la clase
   clickedCard.classList.toggle("favorite");
 
-  renderSeries(globalData);
+  //guardar favoritos en el local storage
+  localStorage.setItem("favorite shows", JSON.stringify(favoriteShows));
+
+  renderFavs();
 }
 
 /////
@@ -99,7 +107,7 @@ function handleClickCard(e) {
 //Función para resetear las cards y que no se me acumulen
 function cleanCards() {
   //Seleccionar las cards para poder eliminarlas
-  const $allCards = document.querySelectorAll(".card");
+  const $allCards = document.querySelectorAll(".card-serie");
 
   for (const card of $allCards) {
     card.remove();
@@ -128,7 +136,6 @@ if (localStorage.getItem("shows") === null) {
   //mostrar las series
   renderSeries(globalData);
 }
-
 //////
 
 function handleSubmit(ev) {
@@ -138,6 +145,8 @@ function handleSubmit(ev) {
   cleanCards();
   getShows();
 }
+
+renderFavs();
 
 //EVENT LISTENERS
 //$searchInput.addEventListener("keyup", handleSubmit);
