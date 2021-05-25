@@ -3,13 +3,10 @@
 //FUNCIONES
 
 //Creamos las cards
-
 function renderSeries(data) {
   //recorro el array que tiene dentro score y show, show es un objeto
   for (const object of data) {
-    //si la card que se pinta está en favoritos
-
-    //crear la lista y las cards con los títulos
+    //Crear la lista desde el DOM
     const $newLi = document.createElement("li");
     $newLi.classList = "card";
 
@@ -17,7 +14,7 @@ function renderSeries(data) {
     //la etiqueta pintada en HTML con el objeto del DATA
     $newLi.dataset.id = object.show.id;
 
-    //si no hay portada se pondrá una imagen por defecto
+    //Si no hay portada se pondrá una default img
     if (!object.show.image) {
       $newLi.style = `background: url(https://via.placeholder.com/210x295/ffffff/666666/?text=TV) center`;
     } else {
@@ -25,43 +22,40 @@ function renderSeries(data) {
     }
 
     $seriesUl.appendChild($newLi);
-
     const $newH3Title = document.createElement("h3");
     $newH3Title.classList = "card-title";
     $newLi.appendChild($newH3Title);
-
     const $text = document.createTextNode(object.show.name);
     $newH3Title.appendChild($text);
 
-    const isPresent = favoriteShows.find((fav) => fav === object.show.id);
+    function renderFavs() {
+      //si la card que se pinta está en mi array de favoritos
+      const isPresent = favoriteShows.find((fav) => fav === object.show.id);
 
-    if (isPresent === undefined) {
-      $newLi.classList.add = "";
-    } else {
-      $newLi.classList.add = "favorite";
-      $favoritesUl.appendChild($newLi);
+      if (isPresent === undefined) {
+        $newLi.classList.add = "";
+      } else {
+        $newLi.classList.add("favorite-card");
+        $favoritesUl.appendChild($newLi);
+      }
+
+      //Guardar favoritos en localStorage
+      localStorage.setItem("favorite shows", JSON.stringify(favoriteShows));
+
+      if (localStorage.getItem("favorite shows") === null) {
+        favoriteShows = JSON.parse(localStorage.getItem("favorite shows"));
+      }
     }
+    renderFavs();
   }
 
-  console.log($favoritesUl);
-
-  //Seleccionamos todas las cards para hacer FAVORITOS
+  //Seleccionar cards
 
   const $allCards = document.querySelectorAll(".card");
 
   for (const card of $allCards) {
     //se le asigna un listener a CADA card, por eso se mete dentro del for of
     card.addEventListener("click", handleClickCard);
-  }
-}
-
-//Función para resetear las cards y que no se me acumulen
-function cleanCards() {
-  //Seleccionar las cards para poder eliminarlas
-  const $allCards = document.querySelectorAll(".card");
-
-  for (const card of $allCards) {
-    card.remove();
   }
 }
 
@@ -92,13 +86,34 @@ function handleClickCard(e) {
     favoriteShows = favoriteShows.filter((fav) => fav !== selectedId);
   }
 
-  renderSeries(globalData);
+  console.log(isPresent, favoriteShows);
 
   //hacemos un toggle para añadir y quitar la clase
   clickedCard.classList.toggle("favorite");
+
+  renderSeries(globalData);
 }
 
 /////
+
+//Función para resetear las cards y que no se me acumulen
+function cleanCards() {
+  //Seleccionar las cards para poder eliminarlas
+  const $allCards = document.querySelectorAll(".card");
+
+  for (const card of $allCards) {
+    card.remove();
+  }
+}
+
+function cleanFavs() {
+  const $allFavCards = document.querySelectorAll(".favorite-card");
+
+  for (const card of $allFavCards) {
+    card.remove();
+  }
+}
+
 ////
 
 //paso 1: getItem
@@ -127,3 +142,4 @@ function handleSubmit(ev) {
 //EVENT LISTENERS
 //$searchInput.addEventListener("keyup", handleSubmit);
 $searchButton.addEventListener("click", handleSubmit);
+$resetInput.addEventListener("click", cleanFavs);

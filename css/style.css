@@ -51,7 +51,7 @@
 .input-search,
 .input-submit {
   border: thin solid #00000050;
-  margin: 0.5rem;
+  margin: 1.5rem 0.5rem;
   padding: 0.8rem 1.2rem;
 }
 
@@ -60,9 +60,15 @@
   padding: 0.8rem 1.8rem;
 }
 
+.reset {
+  background-color: rgb(172, 0, 0);
+  color: white;
+  padding: 0.8rem 1.8rem;
+}
+
 .output-section {
-  height: 45vh;
-  margin: 0 auto;
+  height: 35vh;
+  margin: 1.5rem auto;
   max-width: 1200px;
 
   display: flex;
@@ -85,7 +91,7 @@
 .favorites-section {
   display: flex;
   flex-flow: column wrap;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
 
   gap: 1rem;
@@ -95,9 +101,8 @@
 
 .title-favorites {
   font-size: 1rem;
-
   position: absolute;
-  transform: translateY(-20px);
+  transform: translateY(-25px);
 }
 
 .card {

@@ -4,6 +4,7 @@
 
 const $searchButton = document.querySelector(".js-button");
 const $searchInput = document.querySelector(".js-search");
+const $resetInput = document.querySelector(".js-reset");
 const $seriesUl = document.querySelector(".js-card-ul");
 const $favoritesUl = document.querySelector(".js-favorites-ul");
 
