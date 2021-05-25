@@ -56,11 +56,13 @@
 }
 
 .input-submit {
+  cursor: pointer;
   background-color: #ffcc00;
   padding: 0.8rem 1.8rem;
 }
 
 .reset {
+  cursor: pointer;
   background-color: rgb(172, 0, 0);
   color: white;
   padding: 0.8rem 1.8rem;
@@ -112,6 +114,20 @@
 
 .favorite {
   border: 5px solid rgb(230, 0, 0);
+}
+
+.delete {
+  cursor: pointer;
+  background-color: rgb(230, 0, 0);
+  border: thin solid white;
+  border-radius: 50%;
+  color: white;
+  width: 25px;
+  height: 25px;
+  padding: 0.2rem;
+
+  text-align: center;
+  font-weight: 700;
 }
 
 .card-title {
