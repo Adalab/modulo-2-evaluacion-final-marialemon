@@ -104,16 +104,19 @@ function renderFavs() {
     const $text = document.createTextNode(object.show.name);
     $newH3Title.appendChild($text);
 
-    //Botón de eliminar - Esto no está terminado
-    const $newDeleteButton = document.createElement("div");
-    $newDeleteButton.classList = "delete";
-    $newLi.appendChild($newDeleteButton);
-    const $x = document.createTextNode("X");
-    $newDeleteButton.appendChild($x);
-
     $favoritesUl.appendChild($newLi);
+    /*
+    · //Botón de eliminar - Esto no está terminado
+    · const $newDeleteButton = document.createElement("div");
+    · $newDeleteButton.classList = "delete";
+    · $newLi.appendChild($newDeleteButton);
+    · const $x = document.createTextNode("X");
+    · $newDeleteButton.appendChild($x);
 
-    const $deleteButton = document.querySelector(".delete");
+    · 
+
+    · const $deleteButton = document.querySelector(".delete");
+    */
   }
 }
 
