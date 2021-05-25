@@ -21,16 +21,15 @@ function getShows() {
     //then recoge la respuesta positiva (como un if)
     .then((response) => response.json()) //ejecuto el método json porque lo que espero recibir es un json
     .then((data) => {
+      /*
       globalData.splice(0, globalData.length);
       for (let item of data) {
         globalData.push(item);
       }
+      */
 
-      // paso 3: setItem
-      // hacemos un JSON.stringify para convertir el objeto data
-      // que inicialmente es un JSON, a un string
-      // porque el localStorage SOLO ADMITE arrays y strings
-      //  localStorage.setItem("shows", JSON.stringify(globalData));
+      globalData = data;
+
       //render series
       renderSeries(globalData);
     })
@@ -68,6 +67,7 @@ function renderSeries(data) {
     const $text = document.createTextNode(object.show.name);
     $newH3Title.appendChild($text);
   }
+
   //Seleccionar cards
   const $allCards = document.querySelectorAll(".card");
   for (const card of $allCards) {
@@ -77,12 +77,18 @@ function renderSeries(data) {
 }
 
 function renderFavs() {
-  //guardar favoritos en el local storage
+  /*
+  guardar favoritos en el local storage
+  setItem y getItem
+    · hacemos un JSON.stringify para convertir el objeto data
+    · que inicialmente es un JSON, a un string
+    · porque el localStorage SOLO ADMITE arrays y strings
+  */
   localStorage.setItem("favorite shows", JSON.stringify(favoriteShows));
   favoriteShows = JSON.parse(localStorage.getItem("favorite shows"));
 
-  console.log(favoriteShows);
   cleanFavs();
+
   for (let object of favoriteShows) {
     const $newLi = document.createElement("li");
     $newLi.classList = "card";
@@ -105,6 +111,7 @@ function renderFavs() {
     $newH3Title.appendChild($text);
 
     $favoritesUl.appendChild($newLi);
+
     /*
     · //Botón de eliminar - Esto no está terminado
     · const $newDeleteButton = document.createElement("div");
@@ -112,8 +119,6 @@ function renderFavs() {
     · $newLi.appendChild($newDeleteButton);
     · const $x = document.createTextNode("X");
     · $newDeleteButton.appendChild($x);
-
-    · 
 
     · const $deleteButton = document.querySelector(".delete");
     */
@@ -145,8 +150,9 @@ function handleClickCard(e) {
   } else {
     //filtro y sobreescribo mi array inicial con los favoritos
     //con esto, si dejo de seleccionar la card, se elimina del array
-    favoriteShows = favoriteShows.filter((fav) => fav !== selectedId);
+    favoriteShows = favoriteShows.filter((fav) => fav.show.id !== selectedId);
   }
+  console.log(favoriteShows);
 
   //hacemos un toggle para añadir y quitar la clase
   clickedCard.classList.toggle("favorite");
@@ -176,17 +182,6 @@ function cleanFavs() {
 
 ////
 
-//paso 1: getItem
-//si el localStorage está vacío llama al fetch
-//"shows" es una KEY que me he inventado, puede tener cualquier otro nombre
-if (localStorage.getItem("shows") === null) {
-  getShows();
-} else {
-  //mostrar las series
-  renderSeries(globalData);
-}
-//////
-
 function handleSubmit(ev) {
   //para prevenir que se recargue la página con submit
   ev.preventDefault();
@@ -195,9 +190,7 @@ function handleSubmit(ev) {
   getShows();
 }
 
-renderFavs();
-
 //EVENT LISTENERS
 //$searchInput.addEventListener("keyup", handleSubmit);
 $searchButton.addEventListener("click", handleSubmit);
-$resetInput.addEventListener("click", cleanFavs);
+//$resetInput.addEventListener("click", cleanFavs);
