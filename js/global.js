@@ -145,7 +145,7 @@ function handleClickCard(e) {
   } else {
     //filtro y sobreescribo mi array inicial con los favoritos
     //con esto, si dejo de seleccionar la card, se elimina del array
-    favoriteShows = favoriteShows.filter((fav) => fav !== selectedId);
+    favoriteShows = favoriteShows.filter((fav) => fav.show.id !== selectedId);
   }
 
   //hacemos un toggle para añadir y quitar la clase
